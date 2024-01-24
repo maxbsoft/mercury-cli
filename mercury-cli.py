@@ -249,7 +249,7 @@ def run_checkbaselist(args):
 
         start = time.time()
         # Выполнение запроса
-        results = client.execute('SELECT * FROM test LIMIT 10')
+        results = client.execute('SELECT * FROM test LIMIT 100000')
 
         # Работа с результатами
         for row in results:
