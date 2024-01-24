@@ -252,8 +252,10 @@ def run_checkbaselist(args):
         results = client.execute('SELECT * FROM test LIMIT 100000')
 
         # Работа с результатами
+        count = 0
         for row in results:
-            print(row)
+            count = count + 1
+        print('count:', count)
         print('time:', time.time() - start)
 
         # session, cluster = connect_to_scylladb(args.db, args.db_port)
