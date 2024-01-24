@@ -237,15 +237,33 @@ def run_fillbaselist(args):
 def run_checkbaselist(args):
     print(f"Running the 'checkbaselist' command. Keyspace:{args.keyspace}")
     try:
-        print(f"Connecting to ScyllaDB {args.db}:{args.db_port}...")
-        session, cluster = connect_to_scylladb(args.db, args.db_port)
-        session.set_keyspace(args.keyspace)
+        print(f"Connecting to ClickHouse {args.db}:{args.db_port}...")
+
+        # Подключение к ClickHouse
+        client = Client(
+            host=args.db,
+            # user='your_username',
+            # password='your_password',
+            database='default'
+        )
+
         start = time.time()
-        query = SimpleStatement("SELECT * FROM baselist WHERE data='!root'", consistency_level=ConsistencyLevel.LOCAL_ONE)
-        rows: ResultSet = session.execute(query, timeout=200)
-        count = 0
-        print('len(rows):', rows.one())
+        # Выполнение запроса
+        results = client.execute('SELECT * FROM test LIMIT 10')
+
+        # Работа с результатами
+        for row in results:
+            print(row)
         print('time:', time.time() - start)
+
+        # session, cluster = connect_to_scylladb(args.db, args.db_port)
+        # session.set_keyspace(args.keyspace)
+        # start = time.time()
+        # query = SimpleStatement("SELECT * FROM test", consistency_level=ConsistencyLevel.LOCAL_ONE)
+        # rows: ResultSet = session.execute(query, timeout=200)
+        # count = 0
+        # print('len(rows):', rows.one())
+        # print('time:', time.time() - start)
         # rows.fetch_next_page()
 
         # for row in rows:
